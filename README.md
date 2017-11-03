@@ -97,4 +97,4 @@ Created a skeleton Express application with a package.json, app.js, views folder
 
 ## Annotations / References Used
 
-*[passport.js authentication docs](http://passportjs.org/docs) - (add link to source code that was based on this)
+* [passport.js authentication docs](http://passportjs.org/docs) - (add link to source code that was based on this)
