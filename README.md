@@ -46,7 +46,7 @@ An Example Year with Embedded Items:
 ```
 Months, Weeks, and Days are structured just like Year, except Months contain Weeks, Weeks contain Days, and Days do not contain any other date structure
 
-## [Link to Commented First Draft Schema](db.js) 
+## [Link to Commented First Draft Schema](./src/db.js) 
 
 This is a first draft, it may need some reworking or editing.
 
@@ -93,11 +93,8 @@ I may change this in the future; I'm still fleshing out the details
 
 ## [Link to Initial Main Project File](app.js) 
 
-(___TODO__: create a skeleton Express application with a package.json, app.js, views folder, etc. ... and link to your initial app.js_)
+Created a skeleton Express application with a package.json, app.js, views folder
 
 ## Annotations / References Used
 
-(___TODO__: list any tutorials/references/etc. that you've based your code off of_)
-
-1. [passport.js authentication docs](http://passportjs.org/docs) - (add link to source code that was based on this)
-2. [tutorial on vue.js](https://vuejs.org/v2/guide/) - (add link to source code that was based on this)
+*[passport.js authentication docs](http://passportjs.org/docs) - (add link to source code that was based on this)
