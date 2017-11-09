@@ -1,0 +1,34 @@
+{{#if page}}
+	<h1>{{page.title}}</h1>
+
+	{{#if item}}
+		<ul>
+		{{#if this.tasks}}
+			{{#each this.tasks}}
+				<li>{{this.content}}</li>
+			{{/each}}
+		{{/if}}
+
+		{{#if this.events}}
+			{{#each this.event}}
+				<li>{{this.content}}</li>
+			{{/each}}
+		{{/if}}
+
+		{{#if this.notes}}
+			{{#each this.notes}}
+				<li>{{this.content}}</li>
+			{{/each}}
+		{{/if}}
+		</ul>
+	{{/if}}
+
+{{/if}}
+
+<form method="POST" action="/future-log-add">
+	<select name="type">
+		<option value="note">Note</option>
+		<option value="task">Task</option>
+		<option value="event">Event</option>
+	</select>
+</form>

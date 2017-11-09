@@ -1,0 +1,13 @@
+<h1>Index</h1>
+
+<ul>
+	{{#each pages}}
+		<li><a href = "/page/{{slug}}">{{title}}</a></li>
+	{{/each}}
+	<li>
+		<form method="POST" action="page-add">
+			New Page: <input type = "text" name = "page_title" placeholder = "Page Title"> 
+			<input type = "submit" value = "Add New Page">
+		</form>
+	</li>
+</ul>
