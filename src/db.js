@@ -1,20 +1,8 @@
 // second draft data model
 const mongoose = require('mongoose');
+const passportLocalMongoose = require('passport-local-mongoose');
 const URLSlugs = require('mongoose-url-slugs');
-
-/*
-	User
-	my site will require authentication, so users will have a username and password
-	users will have Year, Month, Week, and Day objects but those will be embedded
-	only years, months, weeks, and days with added data will be stored, and not empty years
-	users will also have pages, which represent additional notes outside date related ones
- */
-const User = new mongoose.Schema({
-	// username provided by authentication plugin
-	// password hash provided by authentication plugin
-	pages: [{type: mongoose.Schema.Types.ObjectId, ref: 'Page'}],
-	years: [{type: mongoose.Schema.Types.ObjectId, ref: 'Year'}]
-});
+const bcrypt = require('bcrypt-nodejs');
 
 /*
 	Task
@@ -49,8 +37,8 @@ const Note = new mongoose.Schema({
  */
 const Item = new mongoose.Schema({
 	tasks: [Task],
-  	events: [Event], 
-  	notes: [Note]
+	events: [Event], 
+	notes: [Note]
 });
 
 /*
@@ -59,7 +47,9 @@ const Item = new mongoose.Schema({
  */
 const Page = new mongoose.Schema({
 	title: {type: String, required: true},
-	items: [Item]
+	tasks: [Task],
+	events: [Event], 
+	notes: [Note]
 });
 Page.plugin(URLSlugs('title'));
 
@@ -106,6 +96,30 @@ const Day = new mongoose.Schema({
 	items: {type: [Item], required: true}
 });
 
+/*
+	User
+	my site will require authentication, so users will have a username and password
+	users will have Year, Month, Week, and Day objects but those will be embedded
+	only years, months, weeks, and days with added data will be stored, and not empty years
+	users will also have pages, which represent additional notes outside date related ones
+ */
+const User = new mongoose.Schema({
+	email: String,		
+	passwordHash: String,
+	pages: [Page],
+	years: [Year]
+});
+
+User.methods.generateHash = function(password) {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+
+// checking if password is valid
+User.methods.validPassword = function(password) {
+    return bcrypt.compareSync(password, this.passwordHash);
+};
+
+User.plugin(passportLocalMongoose);
 
 Year.plugin(URLSlugs('year'));
 Month.plugin(URLSlugs('month'));
@@ -126,7 +140,7 @@ mongoose.model('Note', Note);
 // is the environment variable, NODE_ENV, set to PRODUCTION? 
 let dbconf;
 if (process.env.NODE_ENV === 'PRODUCTION') {
-	// if we're in PRODUCTION mode, then read the configration from a file
+	// if we're in PRODUCTION mode, then read the configuration from a file
 	// use blocking file io to do this...
 	const fs = require('fs');
 	const path = require('path');

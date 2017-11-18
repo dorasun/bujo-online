@@ -5,7 +5,7 @@
 	</form>
 	<ul>
 		{{#each pages}}
-			<li><a href = "/page/{{slug}}">{{title}}</a></li>
+			<li><a href = "/page/{{this.slug}}">{{this.title}}</a></li>
 		{{/each}}
 		<li>
 			<form method="POST" action="page-add">

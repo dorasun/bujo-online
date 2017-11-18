@@ -1,18 +1,17 @@
 {{#if page}}
 	<h1>{{page.title}}</h1>
-	<p> THIS FORM DOESN'T WORK YET AHH </p>
 	<ul>
-		{{#each page.items}}
+		{{#each page}}
 			{{#each this.tasks}}
-				<li>{{this.content}}</li>
+				<li class = 'task'>{{this.content}}</li>
 			{{/each}}
 
 			{{#each this.events}}
-				<li>{{this.content}}</li>
+				<li class = 'event' >{{this.content}}</li>
 			{{/each}}
 
 			{{#each this.notes}}
-				<li>{{this.content}}</li>
+				<li class = 'note'>{{this.content}}</li>
 			{{/each}}
 		{{/each}}
 
@@ -29,4 +28,5 @@
 			</form>
 		</li>
 	</ul>
+	<p><a href = '/'>Back</a></p>
 {{/if}}
