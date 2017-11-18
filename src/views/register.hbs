@@ -1,18 +1,18 @@
-<h1>Log In</h1>
+<h1>Sign Up</h1>
 
 {{#if message}}
     {{message}}
 {{/if}}
 
-<form method="post" action="/login-attempt">
+<form method="post" action="/signup-attempt">
     <label>Email:</label>
     <input type="text" name="email"/>
     <br>
     <label>Password:</label>
     <input type="password" name="passwordHash"/>
     <br>
-    <input type="submit" value="Log In"/>
+    <input type="submit" value="Sign Up"/>
 </form>
 
-<p>No account? <a href="/signup">Sign up</a></p>
+<p>Already have an account? <a href="/login">Log in</a></p>
 <p>Or go <a href="/">home</a></p>
