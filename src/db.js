@@ -10,9 +10,9 @@ const bcrypt = require('bcrypt-nodejs');
  */
 const Task = new mongoose.Schema({
 	content: String,
-	completed: Boolean,
-	migrated: Boolean,
-	scheduled: Boolean
+	incomplete: Boolean,
+	inprog: Boolean,
+	completed: Boolean
 });
 
 /*
@@ -54,49 +54,6 @@ const Page = new mongoose.Schema({
 Page.plugin(URLSlugs('title'));
 
 /*
-	Year
-	represents a user's notes for the year
- */
-const Year = new mongoose.Schema({
-	user: {type: mongoose.Schema.Types.ObjectId, ref:'User'},
-	year: {type: Number, required: true},
-	items: {type: [Item], required: true},
-	months: [{type: mongoose.Schema.Types.ObjectId, ref: 'Month'}]
-});
-
-/*
-	Month
-	represents a user's notes for the month
- */
-const Month = new mongoose.Schema({
-	user: {type: mongoose.Schema.Types.ObjectId, ref:'User'},
-	month: {type: Number, required: true},
-	items: {type: [Item], required: true},
-	weeks: [{type: mongoose.Schema.Types.ObjectId, ref: 'Week'}]
-});
-
-/*
-	Week
-	represents a user's notes for the week
- */
-const Week = new mongoose.Schema({
-	user: {type: mongoose.Schema.Types.ObjectId, ref:'User'},
-	week: {type: Number, required: true},
-	items: {type: [Item], required: true},
-	days: [{type: mongoose.Schema.Types.ObjectId, ref: 'Day'}]
-});
-
-/*
-	Day
-	represents a user's notes for the day
- */
-const Day = new mongoose.Schema({
-	user: {type: mongoose.Schema.Types.ObjectId, ref:'User'},
-	day: {type: Number, required: true},
-	items: {type: [Item], required: true}
-});
-
-/*
 	User
 	my site will require authentication, so users will have a username and password
 	users will have Year, Month, Week, and Day objects but those will be embedded
@@ -106,8 +63,8 @@ const Day = new mongoose.Schema({
 const User = new mongoose.Schema({
 	email: String,		
 	passwordHash: String,
-	pages: [Page],
-	years: [Year]
+	pages: [Page]//,
+	//years: [Year]
 });
 
 User.methods.generateHash = function(password) {
@@ -121,18 +78,8 @@ User.methods.validPassword = function(password) {
 
 User.plugin(passportLocalMongoose);
 
-Year.plugin(URLSlugs('year'));
-Month.plugin(URLSlugs('month'));
-Week.plugin(URLSlugs('week'));
-Day.plugin(URLSlugs('day'));
-
 mongoose.model('User', User);
 mongoose.model('Page', Page);
-mongoose.model('Year', Year);
-mongoose.model('Month', Month);
-mongoose.model('Week', Week);
-mongoose.model('Day', Day);
-mongoose.model('Item', Item);
 mongoose.model('Task', Task);
 mongoose.model('Event', Event);
 mongoose.model('Note', Note);

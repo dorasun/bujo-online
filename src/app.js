@@ -2,10 +2,12 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const flash = require('connect-flash');
 
+const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -14,11 +16,6 @@ require('./db.js');
 
 const User = mongoose.model('User');
 const Page = mongoose.model('Page');
-// const Year = mongoose.model('Year');
-// const Month = mongoose.model('Month');
-// const Week = mongoose.model('Week');
-// const Day = mongoose.model('Day');
-// const Item = mongoose.model('Item');
 const Task = mongoose.model('Task');
 const Event = mongoose.model('Event');
 const Note = mongoose.model('Note');
@@ -34,8 +31,8 @@ app.use(passport.session());
 app.use(flash());
 
 // view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.use(express.static(path.join(__dirname, 'public')));
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'hbs');
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -130,6 +127,10 @@ app.get('/logout', function(req, res) {
 	res.redirect('/');
 });
 
+app.get('/account', isLoggedIn, function(req, res) {
+	res.render('account', {user: req.user});
+});
+
 app.get('/', function(req, res){
 	if(req.user){
 		res.render('index', {user: req.user, pages: req.user.pages});
@@ -139,7 +140,7 @@ app.get('/', function(req, res){
 	}
 });
 
-app.post('/page-add', function(req, res){	//for adding more links to the index
+app.post('/page-add', isLoggedIn, function(req, res){	//for adding more links to the index
 	User.findOne({email: req.user.email}, function(err, user){
 		if(err){
 			res.redirect('/');
@@ -181,13 +182,72 @@ app.get('/page/:slug', isLoggedIn, function(req, res) {
 				res.redirect('/');
 			}
 			else{
-				res.render('page', {page: user.pages[slugs.indexOf(req.params.slug)]});
+				const currPage = user.pages[slugs.indexOf(req.params.slug)];
+				res.render('page', {page: currPage});
 			}
 		}
 	});
 });
 
-app.post('/page/:slug-add', function(req, res){
+app.post('/page/:slug-edit', isLoggedIn, function(req, res){
+	User.findOne({email: req.user.email}, function(err, user){
+		if(err){
+			res.redirect('/');
+		}
+		else{
+			const slugs = user.pages.map(a => a.slug);
+			if(slugs.indexOf(req.params.slug) === -1){		//page doesn't exist
+				res.redirect('/');
+			}
+			else{
+				const page = user.pages[slugs.indexOf(req.params.slug)];
+				for(let i=0; i<page.tasks.length; i++){
+					if(page.tasks[i].content === req.body.stage.split('-')[0]){
+						if(req.body.stage.split('-')[1] === 'incomplete'){
+							page.tasks[i].incomplete = true;
+							page.tasks[i].inprog = false;
+							page.tasks[i].completed = false;
+						}
+						if(req.body.stage.split('-')[1] === 'inprog'){
+							page.tasks[i].incomplete = false;
+							page.tasks[i].inprog = true;
+							page.tasks[i].completed = false;
+						}
+						if(req.body.stage.split('-')[1] === 'complete'){
+							page.tasks[i].incomplete = false;
+							page.tasks[i].inprog = false;
+							page.tasks[i].completed = true;
+						}
+						page.tasks[i].save(function(err){
+							if (err){
+								res.redirect('/');
+							}
+							else{
+								page.save(function(err){
+									if (err){
+										res.redirect('/');
+									}
+									else{
+										user.save(function(err){
+											if(err){
+												res.redirect('/');
+											}
+											else{
+												res.redirect('/page/'+req.params.slug);
+											}
+										});
+									}
+								});
+							}
+						});
+					}
+				}
+			}
+		}
+	});
+});
+
+app.post('/page/:slug-add', isLoggedIn, function(req, res){
 	User.findOne({email: req.user.email}, function(err, user){
 		if(err){
 			res.redirect('/');
@@ -204,14 +264,14 @@ app.post('/page/:slug-add', function(req, res){
 				if(req.body.type === 'task'){
 					newItem = new Task({
 						content: req.body.content,
-						completed: false,
-						migrated: false,
-						scheduled: false
+						incomplete: true,
+						inprog: false,
+						completed: false
 					});
 				}
 				else if(req.body.type === 'event'){
 					newItem = new Event({
-						content: req.body.content
+						content: req.body.date +': ' +req.body.content
 					});
 				}
 				else if(req.body.type === 'note'){
@@ -246,7 +306,7 @@ app.post('/page/:slug-add', function(req, res){
 									else{
 										res.redirect('/page/'+req.params.slug);
 									}
-								})
+								});
 							}
 						});
 					}

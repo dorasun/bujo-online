@@ -1,9 +1,36 @@
+<script src="../javascript/itemForm.js"></script>
+
 {{#if page}}
 	<h1>{{page.title}}</h1>
 	<ul>
-		{{#each page}}
+		{{#each page as |value key|}}
 			{{#each this.tasks}}
-				<li class = 'task'>{{this.content}}</li>
+				<li class = 'task'>
+					<form method="POST" action="{{../../page.slug}}-edit">
+						{{this.content}}&emsp;
+						<select name="stage">
+							{{#if this.incomplete}}
+								<option value="{{this.content}}-incomplete" selected>Incomplete</option>
+							{{else}}
+								<option value="{{this.content}}-incomplete">Incomplete</option>
+							{{/if}}
+							
+							{{#if this.inprog}}
+								<option value="{{this.content}}-inprog" selected>In Progress</option>
+							{{else}}
+								<option value="{{this.content}}-inprog">In Progress</option>
+							{{/if}}
+
+							{{#if this.completed}}
+								<option value="{{this.content}}-complete" selected>Completed</option>
+							{{else}}
+								<option value="{{this.content}}-complete">Completed</option>
+							{{/if}}
+						</select>
+
+						<button class="updateBtn">Update</button>
+					</form>
+				</li>
 			{{/each}}
 
 			{{#each this.events}}
@@ -16,13 +43,13 @@
 		{{/each}}
 
 		<li>
-			<form method="POST" action="{{page.slug}}-add">
+			<form method="POST" id = "form" action="{{page.slug}}-add">
 				<select name="type">
-					<option value="note">Note</option>
 					<option value="task">Task</option>
 					<option value="event">Event</option>
+					<option value="note">Note</option>
 				</select>
-				<input type = "text" name = "content" placeholder = "Content"> 
+				<input type = "text" name = "content" placeholder = "Content">
 
 				<input type = "submit" value = "Add New Item">
 			</form>
