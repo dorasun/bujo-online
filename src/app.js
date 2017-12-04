@@ -49,12 +49,12 @@ passport.deserializeUser(function(id, done) {
 });
 
 passport.use('local-login', new LocalStrategy({
-		usernameField : 'email',
+		usernameField : 'username',
 		passwordField : 'passwordHash',
 		passReqToCallback : true
 	},
-	function(req, email, password, done) {
-		User.findOne({ 'email' :  email }, function(err, user) {
+	function(req, username, password, done) {
+		User.findOne({ 'username' :  username }, function(err, user) {
 			if (err){
 				return done(err);
 			}
@@ -82,23 +82,23 @@ app.post('/login-attempt', passport.authenticate('local-login', {
 }));
 
 passport.use('local-signup', new LocalStrategy({
-    usernameField : 'email',
+    usernameField : 'username',
     passwordField : 'passwordHash',
     passReqToCallback : true 
 },
-function(req, email, password, done) {
+function(req, username, password, done) {
     process.nextTick(function() {
 
-        User.findOne({ 'email' :  email }, function(err, user) {
+        User.findOne({ 'username' :  username }, function(err, user) {
             if (err){
                 return done(err);
             }
             if (user) {
-                return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
             } 
             else {
                 const newUser = new User();
-                newUser.email = email;
+                newUser.username = username;
                 newUser.passwordHash = newUser.generateHash(password);
                 newUser.original = true;
                 newUser.color = false;
@@ -135,7 +135,7 @@ app.get('/account', isLoggedIn, function(req, res) {
 });
 
 app.post('/settings', isLoggedIn, function(req, res){	//for adding more links to the index
-	User.findOne({email: req.user.email}, function(err, user){
+	User.findOne({username: req.user.username}, function(err, user){
 		if(err){
 			res.redirect('/');
 		}
@@ -177,7 +177,7 @@ app.get('/', function(req, res){
 });
 
 app.post('/page-add', isLoggedIn, function(req, res){	//for adding more links to the index
-	User.findOne({email: req.user.email}, function(err, user){
+	User.findOne({username: req.user.username}, function(err, user){
 		if(err){
 			res.redirect('/');
 		}
@@ -208,7 +208,7 @@ app.post('/page-add', isLoggedIn, function(req, res){	//for adding more links to
 });
 
 app.get('/page/:slug', isLoggedIn, function(req, res) {
-	User.findOne({email: req.user.email}, function(err, user){
+	User.findOne({username: req.user.username}, function(err, user){
 		if(err){
 			res.redirect('/');
 		}
@@ -226,7 +226,7 @@ app.get('/page/:slug', isLoggedIn, function(req, res) {
 });
 
 app.post('/page/:slug-edit', isLoggedIn, function(req, res){
-	User.findOne({email: req.user.email}, function(err, user){
+	User.findOne({username: req.user.username}, function(err, user){
 		if(err){
 			res.redirect('/');
 		}
@@ -284,7 +284,7 @@ app.post('/page/:slug-edit', isLoggedIn, function(req, res){
 });
 
 app.post('/page/:slug-add', isLoggedIn, function(req, res){
-	User.findOne({email: req.user.email}, function(err, user){
+	User.findOne({username: req.user.username}, function(err, user){
 		if(err){
 			res.redirect('/');
 		}

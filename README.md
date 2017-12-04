@@ -49,21 +49,21 @@ An Example Page with Example Embedded Items:
 
 This is the full schema, feel free to hit history to see how much it has changed.
 
-## Wireframes
+## Original Wireframes - Out of Date
 
-/ - page for information and after logging in, navigation
+/ - page for navigation
 
 ![index view](documentation/index.png)
 
-/signup - page for signing up
+/year - page for showing a year view
 
 ![year view](documentation/year.png)
 
-/login - page for logging in
+/year/month - page for showing a month view
 
 ![month view](documentation/year-month.png)
 
-/page/:slug - page for showing a user's page
+/year/month/week - page for showing a week view
 
 ![day view](documentation/year-month-day.png)
 

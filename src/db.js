@@ -32,16 +32,6 @@ const Note = new mongoose.Schema({
 });
 
 /*
-	Item
-	represents a list of items in a user's notes
- */
-const Item = new mongoose.Schema({
-	tasks: [Task],
-	events: [Event], 
-	notes: [Note]
-});
-
-/*
 	Page
 	represents a page in a user's bujo that isn't time related
  */
@@ -61,7 +51,7 @@ Page.plugin(URLSlugs('title'));
 	users will also have pages, which represent additional notes outside date related ones
  */
 const User = new mongoose.Schema({
-	email: String,		
+	username: String,		
 	passwordHash: String,
 	pages: [Page],
 	original: Boolean,

@@ -1,18 +1,18 @@
 function main() {
 	const form = document.querySelector('#form');
 	const selection = document.querySelector('select[name="type"]');
-	selection.addEventListener('change', function(evt){
+	selection.addEventListener('change', function(){
 		const toChange = document.querySelectorAll('input');
 		const textArea = document.querySelector('textarea');
 		const formBullet = document.querySelector('#form-bullet');
 		formBullet.removeAttribute('class');
 
-	    for(let i=0; i<toChange.length; i++){
-	    	form.removeChild(toChange[i]);
-	    }
-	    if(textArea){
-	    	form.removeChild(textArea);
-	    }
+		for(let i=0; i<toChange.length; i++){
+			form.removeChild(toChange[i]);
+		}
+		if(textArea){
+			form.removeChild(textArea);
+		}
 		
 		if (selection.value === 'task'){
 			const newNode = document.createElement('input');

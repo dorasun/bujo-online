@@ -1,6 +1,6 @@
 function main() {
 	const radio = document.querySelectorAll('input[type="radio"]');
-	for(r in radio){
+	for(const r in radio){
 		radio[r].onclick = function(){
 			const theme = document.querySelector('.bootstrap');
 			const newTheme = document.createElement('link');
