@@ -100,6 +100,9 @@ function(req, email, password, done) {
                 const newUser = new User();
                 newUser.email = email;
                 newUser.passwordHash = newUser.generateHash(password);
+                newUser.original = true;
+                newUser.color = false;
+                newUser.dark = false;
 
                 newUser.save(function(err) {
                     if (err){
@@ -129,6 +132,39 @@ app.get('/logout', function(req, res) {
 
 app.get('/account', isLoggedIn, function(req, res) {
 	res.render('account', {user: req.user});
+});
+
+app.post('/settings', isLoggedIn, function(req, res){	//for adding more links to the index
+	User.findOne({email: req.user.email}, function(err, user){
+		if(err){
+			res.redirect('/');
+		}
+		else{
+			if(req.body.theme === 'original'){
+				user.original = true;
+				user.color = false;
+				user.dark = false;
+			}
+			if(req.body.theme === 'color'){
+				user.original = false;
+				user.color = true;
+				user.dark = false;
+			}
+			if(req.body.theme === 'dark'){
+				user.original = false;
+				user.color = false;
+				user.dark = true;
+			}
+			user.save(function(err){
+				if(err){
+					res.redirect('/');
+				}
+				else{
+					res.redirect('/account');
+				}
+			});
+		}
+	});
 });
 
 app.get('/', function(req, res){
@@ -183,7 +219,7 @@ app.get('/page/:slug', isLoggedIn, function(req, res) {
 			}
 			else{
 				const currPage = user.pages[slugs.indexOf(req.params.slug)];
-				res.render('page', {page: currPage});
+				res.render('page', {user: user, page: currPage});
 			}
 		}
 	});

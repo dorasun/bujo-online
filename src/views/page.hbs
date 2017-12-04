@@ -1,59 +1,74 @@
-<script src="../javascript/itemForm.js"></script>
+{{#if user}}
 
-{{#if page}}
-	<h1>{{page.title}}</h1>
-	<ul>
-		{{#each page as |value key|}}
-			{{#each this.tasks}}
-				<li class = 'task'>
-					<form method="POST" action="{{../../page.slug}}-edit">
-						{{this.content}}&emsp;
-						<select name="stage">
-							{{#if this.incomplete}}
-								<option value="{{this.content}}-incomplete" selected>Incomplete</option>
-							{{else}}
-								<option value="{{this.content}}-incomplete">Incomplete</option>
-							{{/if}}
-							
-							{{#if this.inprog}}
-								<option value="{{this.content}}-inprog" selected>In Progress</option>
-							{{else}}
-								<option value="{{this.content}}-inprog">In Progress</option>
-							{{/if}}
+	{{#if user.original}}
+		<link class="bootstrap" href="../bootstrap-original/css/bootstrap.min.css" rel="stylesheet">
+	{{/if}}
 
-							{{#if this.completed}}
-								<option value="{{this.content}}-complete" selected>Completed</option>
-							{{else}}
-								<option value="{{this.content}}-complete">Completed</option>
-							{{/if}}
-						</select>
+	{{#if user.color}}
+		<link class="bootstrap" href="../bootstrap-color/css/bootstrap.min.css" rel="stylesheet">
+	{{/if}}
 
-						<button class="updateBtn">Update</button>
-					</form>
-				</li>
+	{{#if user.dark}}
+		<link class="bootstrap" href="../bootstrap-dark/css/bootstrap.min.css" rel="stylesheet">
+	{{/if}}
+	<link rel="stylesheet" href="../css/main.css">
+	<script src="../js/itemForm.js"></script>
+
+	{{#if page}}
+		<h1>{{page.title}}</h1>
+		<ul>
+			{{#each page}}
+				{{#each this.tasks}}
+					<li class = 'task'>
+						<form method="POST" action="{{../../page.slug}}-edit">
+							{{this.content}}&emsp;
+							<select name="stage">
+								{{#if this.incomplete}}
+									<option value="{{this.content}}-incomplete" selected>Incomplete</option>
+								{{else}}
+									<option value="{{this.content}}-incomplete">Incomplete</option>
+								{{/if}}
+								
+								{{#if this.inprog}}
+									<option value="{{this.content}}-inprog" selected>In Progress</option>
+								{{else}}
+									<option value="{{this.content}}-inprog">In Progress</option>
+								{{/if}}
+
+								{{#if this.completed}}
+									<option value="{{this.content}}-complete" selected>Completed</option>
+								{{else}}
+									<option value="{{this.content}}-complete">Completed</option>
+								{{/if}}
+							</select>
+
+							<button class="updateBtn">Update</button>
+						</form>
+					</li>
+				{{/each}}
+
+				{{#each this.events}}
+					<li class = 'event'>{{this.content}}</li>
+				{{/each}}
+
+				{{#each this.notes}}
+					<li class = 'note'>{{this.content}}</li>
+				{{/each}}
 			{{/each}}
 
-			{{#each this.events}}
-				<li class = 'event' >{{this.content}}</li>
-			{{/each}}
+			<li id = "form-bullet" class = "task">
+				<form method="POST" id = "form" action="{{page.slug}}-add">
+					<select name="type">
+						<option value="task">Task</option>
+						<option value="event">Event</option>
+						<option value="note">Note</option>
+					</select>
+					<input type = "text" name = "content" placeholder = "Content">
 
-			{{#each this.notes}}
-				<li class = 'note'>{{this.content}}</li>
-			{{/each}}
-		{{/each}}
-
-		<li>
-			<form method="POST" id = "form" action="{{page.slug}}-add">
-				<select name="type">
-					<option value="task">Task</option>
-					<option value="event">Event</option>
-					<option value="note">Note</option>
-				</select>
-				<input type = "text" name = "content" placeholder = "Content">
-
-				<input type = "submit" value = "Add New Item">
-			</form>
-		</li>
-	</ul>
-	<p><a href = '/'>Back</a></p>
+					<input type = "submit" value = "Add New Item">
+				</form>
+			</li>
+		</ul>
+		<p><a href = '/'>Back</a></p>
+	{{/if}}
 {{/if}}

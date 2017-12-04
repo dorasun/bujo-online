@@ -1,11 +1,26 @@
 {{#if user}}
+	{{#if user.original}}
+		<link class="bootstrap" href="../bootstrap-original/css/bootstrap.min.css" rel="stylesheet">
+	{{/if}}
+
+	{{#if user.color}}
+		<link class="bootstrap" href="../bootstrap-color/css/bootstrap.min.css" rel="stylesheet">
+	{{/if}}
+
+	{{#if user.dark}}
+		<link class="bootstrap" href="../bootstrap-dark/css/bootstrap.min.css" rel="stylesheet">
+	{{/if}}
+	<link rel="stylesheet" href="../css/main.css">
+
+	<div id = "account-buttons">
+		<form method="GET" action="account">
+			<input type = "submit" value = "My Account">
+		</form>
+		<form method="GET" action="logout">
+			<input type = "submit" value = "Log Out">
+		</form>
+	</div>
 	<h1>Index</h1>
-	<form method="GET" action="account">
-		<input type = "submit" value = "My Account">
-	</form>
-	<form method="GET" action="logout">
-		<input type = "submit" value = "Log Out">
-	</form>
 	<ul>
 		{{#each pages}}
 			<li><a href = "/page/{{this.slug}}">{{this.title}}</a></li>
@@ -20,6 +35,8 @@
 	
 {{else}}
 	<h1>Welcome to BuJo Online</h1>
+	<p>BuJo Online is a prototype of a virtual bullet journal. Create an account to add titled note pages, on which you can write related tasks, events, and notes. Keep track of your progress on your tasks by updating them as you begin and complete them! Never forget a date again! Navigate to your account page to choose one of three themes for your journal. Join BuJo Online and never worry about losing your journal, running out of pages, or lacking a writing utensil! Get organized today!</p>
+
 	<h3>Please log in or sign up:</h3>
 	<form method="GET" action="login">
 		<input type = "submit" value = "Log In">

@@ -1,4 +1,4 @@
-// second draft data model
+// data model
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
 const URLSlugs = require('mongoose-url-slugs');
@@ -63,8 +63,10 @@ Page.plugin(URLSlugs('title'));
 const User = new mongoose.Schema({
 	email: String,		
 	passwordHash: String,
-	pages: [Page]//,
-	//years: [Year]
+	pages: [Page],
+	original: Boolean,
+	color: Boolean,
+	dark: Boolean
 });
 
 User.methods.generateHash = function(password) {
@@ -102,6 +104,6 @@ if (process.env.NODE_ENV === 'PRODUCTION') {
 	// if we're not in PRODUCTION mode, then use
 	dbconf = 'mongodb://localhost/final-temp';
 }
-mongoose.connect(dbconf);
+mongoose.connect(dbconf, {useMongoClient: true});
 
 //mongoose.connect('mongodb://localhost/final-temp');

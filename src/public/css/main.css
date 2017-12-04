@@ -1,0 +1,16 @@
+body{
+	margin: 30px 50px 30px 50px;
+}
+
+form, button{
+	margin-top: 10px;
+}
+
+textarea{
+	vertical-align: top;
+}
+
+#account-buttons{
+	float: right;
+	text-align: right;
+}

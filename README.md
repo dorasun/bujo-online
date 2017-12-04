@@ -6,12 +6,14 @@ Bullet journals (bujo) have recently become a popular phenomenon, a way to get o
 
 For those of us who are not naturally organized, it may be difficult to adjust and update a bujo on the daily. By making a digital version, users can be reminded to use their journals with the added convenience of being having a virtual journal: no need to buy or maintain a physical journal, integration with other useful tools like Google Calendar, and daily notifications to keep you accountable.
 
+For this project, a complete virtual bullet journal is out of scope, but I will be attempting a prototype of one.
+
 ## Data Model
 
-This application will store Users and their Years, which will in turn contain Months, Weeks, and Days: 
+This application will store Users and their Pages, which will in turn contain Tasks, Events, and Notes: 
 
-* users can have multiple years (via references)
-* each date-related object can have multiple items (by embedding)
+* users can have multiple page (via embedding) and a choice of theme
+* each page can have multiple items (by embedding)
 
 An Example User:
 
@@ -19,52 +21,49 @@ An Example User:
 {
   username: "billjoebujo",
   hash: // a password hash,
-  years: // an array of references to Year documents
+  pages: [Page], // an array of Page documents
+  theme1: Boolean,  //themes are Booleans to better work with Handlebars
+  theme2: Boolean 
 }
 ```
 
-An Example Year with Embedded Items:
+An Example Page with Example Embedded Items:
 
 ```javascript
 {
-  user: // a reference to a User object
-  year: 2017,
-  items: [
-    tasks: [
-        {content: "Plan vacation for summer", migrated: true, scheduled: false, completed: false}
-        {content: "Visit Ashley", migrated: false, scheduled: true, completed: true}
-    ],
-    events: [
-        "5th anniversary"
-    ], 
-    notes: [
-        "Noticed more beetles this year in the garden"
-    ],
+  title: String
+  tasks: [
+      {content: "Plan vacation for summer", incomplete: true, inprog: false, completed: false}
+      {content: "Visit Ashley", incomplete: false, inprog: true, completed: true}
   ],
-  months: // an array of references to Month documents
+  events: [
+      "May 3rd: 5th anniversary"
+  ], 
+  notes: [
+      "Noticed more beetles this year in the garden"
+  ]
 }
 ```
-Months, Weeks, and Days are structured just like Year, except Months contain Weeks, Weeks contain Days, and Days do not contain any other date structure
 
-## [Link to Commented First Draft Schema](./src/db.js) 
+## [Link to Commented Schema](./src/db.js) 
 
-This is a first draft, it may need some reworking or editing.
+This is the full schema, feel free to hit history to see how much it has changed.
 
 ## Wireframes
 
-/ - page for navigation
+/ - page for information and after logging in, navigation
 
 ![index view](documentation/index.png)
 
-/year - page for showing a year view
+/signup - page for signing up
 
 ![year view](documentation/year.png)
 
-/year/month - page for showing a month view
+/login - page for logging in
 
 ![month view](documentation/year-month.png)
 
-/year/month/week - page for showing a week view
+/page/:slug - page for showing a user's page
 
 ![day view](documentation/year-month-day.png)
 
@@ -76,25 +75,25 @@ This is a first draft, it may need some reworking or editing.
 
 1. as non-registered user, I can register a new account with the site
 2. as a user, I can log in to the site
-3. as a user, I can view my notes for the year, month, week, or day
-4. as a user, I can view my past notes
-5. as a user, I can add notes to the year, month, week, or day
-6. as a user, I can modify my notes to the year, month, week, or day
+3. as a user, I can choose a theme for my site that suits my tastes
+4. as a user, I can add new note pages
+5. as a user, I can add tasks, events, and notes to each of my pages
+6. as a user, I can update my tasks to keep track of my progress
 
 ## Research Topics
 
 * (5 points) Integrate user authentication
     * I'm going to be using passport for user authentication
 * (3 points) Use a CSS framework throughout my site
-    * I'm going to create several Bootstrap themes and allow users to choose their own
+    * I'm going to create several Bootstrap themes and allow users to choose between theme
+    * My Bootstrap themes will have some customization and will be minified
 
 8 points total out of 8 required points
-I may change this in the future; I'm still fleshing out the details
 
-## [Link to Initial Main Project File](app.js) 
+## [Link to Main Project File](app.js) 
 
-Created a skeleton Express application with a package.json, app.js, views folder
+Created an Express application with Handlebars as my templating library.
 
 ## Annotations / References Used
 
-* [passport.js authentication docs](http://passportjs.org/docs) - (add link to source code that was based on this)
+* [passport.js authentication tutorial](https://scotch.io/tutorials/easy-node-authentication-setup-and-local) - (add link to source code that was based on this)

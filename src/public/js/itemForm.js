@@ -4,6 +4,8 @@ function main() {
 	selection.addEventListener('change', function(evt){
 		const toChange = document.querySelectorAll('input');
 		const textArea = document.querySelector('textarea');
+		const formBullet = document.querySelector('#form-bullet');
+		formBullet.removeAttribute('class');
 
 	    for(let i=0; i<toChange.length; i++){
 	    	form.removeChild(toChange[i]);
@@ -18,6 +20,7 @@ function main() {
 			newNode.setAttribute('name', 'content');
 			newNode.setAttribute('placeholder', 'Content');
 			form.appendChild(newNode);
+			formBullet.setAttribute('class', 'task');
 		}
 		else if (selection.value === 'event'){
 			const datePicker = document.createElement('input');
@@ -31,6 +34,7 @@ function main() {
 
 			form.appendChild(datePicker);
 			form.appendChild(newNode);
+			formBullet.setAttribute('class', 'event');
 		}
 		else{
 			const newNode = document.createElement('textarea');
@@ -38,6 +42,7 @@ function main() {
 			newNode.setAttribute('placeholder', 'Content');
 
 			form.appendChild(newNode);
+			formBullet.setAttribute('class', 'note');
 		}
 
 		const submit = document.createElement('input');

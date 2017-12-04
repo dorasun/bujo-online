@@ -1,27 +1,47 @@
+{{#if user.original}}
+	<link class="bootstrap" href="../bootstrap-original/css/bootstrap.min.css" rel="stylesheet">
+{{/if}}
+
+{{#if user.color}}
+	<link class="bootstrap" href="../bootstrap-color/css/bootstrap.min.css" rel="stylesheet">
+{{/if}}
+
+{{#if user.dark}}
+	<link class="bootstrap" href="../bootstrap-dark/css/bootstrap.min.css" rel="stylesheet">
+{{/if}}
+<link rel="stylesheet" href="../css/main.css">
+<script src="../js/theme.js"></script>
+
+<div id = "account-buttons">
+	<form method="GET" action="logout">
+		<input type = "submit" value = "Log Out">
+	</form>
+</div>
 <h1>Welcome {{user.email}}</h1>
 <h3>Settings:</h3>
 
 <h4>Theme:</h4>
-<form method="POST" action="settings">
-	{{#if this.default}}
-		<option value="default" selected>Default</option>
+<form method="POST" action="/settings">
+	{{#if user.original}}
+		<input type="radio" name="theme" value="original" checked>&ensp;Original</option>
 	{{else}}
-		<option value="default">Default</option>
+		<input type="radio" name="theme" value="original">&ensp;Original</option>
 	{{/if}}
-	
-	{{#if this.color}}
-		<option value="color" selected>Color?</option>
+	<br>
+	{{#if user.color}}
+		<input type="radio" name="theme" value="color" checked>&ensp;Color</option>
 	{{else}}
-		<option value="color">Color?</option>
+		<input type="radio" name="theme" value="color">&ensp;Color</option>
 	{{/if}}
-
-	{{#if this.dark}}
-		<option value="dark" selected>Dark</option>
+	<br>
+	{{#if user.dark}}
+		<input type="radio" name="theme" value="dark" checked>&ensp;Dark</option>
 	{{else}}
-		<option value="dark">Dark</option>
+		<input type="radio" name="theme" value="dark">&ensp;Dark</option>
 	{{/if}}
-
+	<br>
 	<button class="updateBtn">Update</button>
 </form>
 
+<br>
 <p><a href = '/'>Back</a></p>
