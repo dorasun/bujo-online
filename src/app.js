@@ -100,16 +100,44 @@ function(req, username, password, done) {
                 const newUser = new User();
                 newUser.username = username;
                 newUser.passwordHash = newUser.generateHash(password);
+                newUser.pages = [];
                 newUser.original = true;
                 newUser.color = false;
                 newUser.dark = false;
 
-                newUser.save(function(err) {
-                    if (err){
-                        throw err;
-                    }
-                    return done(null, newUser);
-                });
+                const newPage = new Page({
+					title: 'Tutorial: Click Me!'
+				});
+				const newItem = new Note({
+					content: 'Welcome to BuJo! This is your Tutorial page. Use the form below to add new items to your page, and navigate back to create new pages!'
+				});
+
+				newItem.save(function(err){
+					if (err){
+						throw err;
+					}
+					else{
+						newPage.notes.push(newItem);
+
+						newPage.save(function(err){
+							if (err){
+								throw err;
+							}
+							else{
+								newUser.pages.push(newPage);
+
+								newUser.save(function(err){
+									if(err){
+										throw err;
+									}
+									else{
+										return done(null, newUser);
+									}
+								});
+							}
+						});
+					}
+				});
             }
         });    
     });
@@ -172,7 +200,7 @@ app.get('/', function(req, res){
 		res.render('index', {user: req.user, pages: req.user.pages});
 	}
 	else{
-		res.render('index', {user: req.user});
+		res.render('index', {});
 	}
 });
 
@@ -183,8 +211,7 @@ app.post('/page-add', isLoggedIn, function(req, res){	//for adding more links to
 		}
 		else{
 			const newPage = new Page({
-				title: req.body.page_title,
-				items: []
+				title: req.body.page_title
 			});
 
 			newPage.save(function(err){
