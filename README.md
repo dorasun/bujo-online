@@ -67,7 +67,7 @@ This is the full schema, feel free to hit history to see how much it has changed
 
 ![day view](documentation/year-month-day.png)
 
-## Site map
+## Site Map - Out of Date
 
 ![site map](documentation/site_map.jpg)
 
